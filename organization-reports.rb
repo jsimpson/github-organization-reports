@@ -19,7 +19,7 @@ def users
 end
 
 def find_user_by_username(username)
-  users.select { |user| user[:username] == username }.first
+  users.detect { |user| user[:username] == username }
 end
 
 Octokit.auto_paginate = true
