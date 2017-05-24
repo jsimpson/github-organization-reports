@@ -19,7 +19,7 @@ $ git clone https://github.com/jsimpson/github-organization-reports.git; cd gith
 Install Octokit
 
 ```bash
-bundle install
+$ bundle install
 ```
 
 Configure the script
