@@ -6,14 +6,14 @@ It is a very crude way to run a loose audit against your GitHub organizations us
 
 ## What does it do?
 
-It pulls down all of your orgainzations members and repositories. It then analyzes repository events and correlates them back to your users. It updates 2 pertinent fields: `active` state (`last_activity` >= `CUTOFF` in days) and `last_activity` of the organization repository event that user. It spits all of this out as a simple CSV.
+It pulls down all of your orgainzations members and repositories. It then analyzes repository events and correlates them back to your users. It updates 2 pertinent fields: `active` state (`last_activity >= CUTOFF`, in days) and `last_activity` of the organization repository event that user. It puts all of this information to to a CSV.
 
 ## Set up
 
 Clone the repository
 
 ```bash
-$ git clone https://github.com/jsimpson/github-organization-report.git .; cd github-organization-report
+$ git clone https://github.com/jsimpson/github-organization-reports.git; cd github-organization-reports
 ```
 
 Install Octokit
@@ -24,9 +24,9 @@ bundle install
 
 Configure the script
 
-Set `ORGANIZAION` to your organization name.
+ * Set `ORGANIZAION` to your organization name.
 
-Set `CUTOFF` appropriately.
+ * Set `CUTOFF` appropriately.
 
 ## Execute
 
