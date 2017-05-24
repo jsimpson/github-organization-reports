@@ -23,16 +23,16 @@ def find_user_by_username(username)
 end
 
 Octokit.auto_paginate = true
-members = Octokit.org_members ORGANIZATION
-repos = Octokit.org_repos ORGANIZATION
+members = Octokit.org_members(ORGANIZATION)
+repos = Octokit.org_repos(ORGANIZATION)
 
 members.each do |member|
-  user = Octokit.user member[:login]
+  user = Octokit.user(member[:login])
   users << User.new(member[:login], user[:name], false, nil)
 end
 
 repos.each do |repo|
-  repo_events = Octokit.repository_events "#{ORGANIZATION}/#{repo[:name]}"
+  repo_events = Octokit.repository_events("#{ORGANIZATION}/#{repo[:name]}")
   repo_events.each { |event| events << Event.new(event[:actor][:login], repo[:name], event[:created_at]) }
 end
 
