@@ -26,16 +26,19 @@ Octokit.auto_paginate = true
 members = Octokit.org_members(ORGANIZATION)
 repos = Octokit.org_repos(ORGANIZATION)
 
+puts "Building user list..."
 members.each do |member|
   user = Octokit.user(member[:login])
   users << User.new(member[:login], user[:name], false, nil)
 end
 
+puts "Building events list..."
 repos.each do |repo|
   repo_events = Octokit.repository_events("#{ORGANIZATION}/#{repo[:name]}")
   repo_events.each { |event| events << Event.new(event[:actor][:login], repo[:name], event[:created_at]) }
 end
 
+puts "Processing events..."
 events.each do |event|
   user = find_user_by_username(event[:username])
   next if user.nil?
@@ -47,12 +50,14 @@ events.each do |event|
   end
 end
 
+puts "Processing user activity..."
 users.each do |user|
   next if user[:last_activity].nil?
 
   user[:active] = true if user[:last_activity].to_datetime >= CUTOFF
 end
 
+puts "Generating CSV..."
 CSV.open("report.csv", "wb") do |csv|
   csv << ["username", "full name", "active", "last_activity"]
   users.each do |user|
