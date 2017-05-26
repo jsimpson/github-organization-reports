@@ -7,7 +7,7 @@ CUTOFF = DateTime.now - 90
 # your organization name
 ORGANIZATION = ""
 
-User = Struct.new(:username, :full_name, :active, :last_activity)
+User = Struct.new(:type, :username, :full_name, :active, :last_activity)
 Event = Struct.new(:username, :repository, :date)
 
 def events
@@ -24,12 +24,18 @@ end
 
 Octokit.auto_paginate = true
 members = Octokit.org_members(ORGANIZATION)
+collaborators = Octokit.outside_collaborators(ORGANIZATION, { accept: "org_membership" })
 repos = Octokit.org_repos(ORGANIZATION)
 
 puts "Building user list..."
 members.each do |member|
   user = Octokit.user(member[:login])
-  users << User.new(member[:login], user[:name], false, nil)
+  users << User.new(:member, member[:login], user[:name], false, nil)
+end
+
+collaborators.each do |collaborator|
+  user = Octokit.user(collaborator[:login])
+  users << User.new(:collaborator, collaborator[:login], user[:name], false, nil)
 end
 
 puts "Building events list..."
@@ -59,9 +65,9 @@ end
 
 puts "Generating CSV..."
 CSV.open("report.csv", "wb") do |csv|
-  csv << ["username", "full name", "active", "last_activity"]
+  csv << ["type", "username", "full name", "active", "last_activity"]
   users.each do |user|
-    csv << [user[:username], user[:full_name], user[:active], user[:last_activity]]
+    csv << [user[:type], user[:username], user[:full_name], user[:active], user[:last_activity]]
   end
 end
 
