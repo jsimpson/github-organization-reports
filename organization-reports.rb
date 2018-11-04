@@ -5,9 +5,9 @@ require "octokit"
 CUTOFF = DateTime.now - 90
 
 # your organization name
-ORGANIZATION = ""
+ORGANIZATION = "intouchhealth"
 
-User = Struct.new(:type, :username, :full_name, :active, :last_activity)
+User = Struct.new(:type, :username, :full_name, :active, :last_activity, :num_events)
 Event = Struct.new(:username, :repository, :date)
 
 def events
@@ -49,6 +49,9 @@ events.each do |event|
   user = find_user_by_username(event[:username])
   next if user.nil?
 
+  user[:num_events] = 0 if user[:num_events].nil?
+  user[:num_events] = user[:num_events] + 1
+
   if user[:last_activity].nil?
     user[:last_activity] = event[:date]
   else
@@ -65,9 +68,9 @@ end
 
 puts "Generating CSV..."
 CSV.open("report.csv", "wb") do |csv|
-  csv << ["type", "username", "full name", "active", "last_activity"]
+  csv << ["type", "username", "full name", "active", "last_activity", "num_events"]
   users.each do |user|
-    csv << [user[:type], user[:username], user[:full_name], user[:active], user[:last_activity]]
+    csv << [user[:type], user[:username], user[:full_name], user[:active], user[:last_activity], user[:num_events]]
   end
 end
 
