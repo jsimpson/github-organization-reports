@@ -3,7 +3,7 @@ GEM
   specs:
     addressable (2.5.1)
       public_suffix (~> 2.0, >= 2.0.2)
-    faraday (0.12.1)
+    faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
     multipart-post (2.0.0)
     octokit (4.7.0)
@@ -20,4 +20,4 @@ DEPENDENCIES
   octokit
 
 BUNDLED WITH
-   1.15.0
+   1.15.1
