@@ -5,7 +5,7 @@ require "octokit"
 CUTOFF = DateTime.now - 90
 
 # your organization name
-ORGANIZATION = "intouchhealth"
+ORGANIZATION = ""
 
 User = Struct.new(:type, :username, :full_name, :active, :last_activity, :num_events)
 Event = Struct.new(:username, :repository, :date)
